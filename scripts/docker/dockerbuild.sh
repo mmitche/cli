@@ -14,27 +14,34 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "$DIR/../common/_common.sh"
+cd "$DIR/../.."
 
-cd $REPOROOT
+if [ -z "$DOCKERFILE" ]; then
+    if [ "$(cat /etc/*-release | grep -cim1 ubuntu)" -eq 1 ]; then
+        export DOCKERFILE=scripts/docker/ubuntu
+    elif [ "$(cat /etc/*-release | grep -cim1 centos)" -eq 1 ]; then
+        export DOCKERFILE=scripts/docker/centos
+    else
+        echo "Unsupported Linux Distro" 1>&2
+        exit 1
+    fi
+fi
 
 [ -z "$DOTNET_BUILD_CONTAINER_TAG" ] && DOTNET_BUILD_CONTAINER_TAG="dotnetcli-build"
 [ -z "$DOTNET_BUILD_CONTAINER_NAME" ] && DOTNET_BUILD_CONTAINER_NAME="dotnetcli-build-container"
 [ -z "$DOCKER_HOST_SHARE_DIR" ] && DOCKER_HOST_SHARE_DIR=$(pwd)
-[ -z "$DOCKER_OS" ] && DOCKER_OS=$OSNAME
 [ -z "$BUILD_COMMAND" ] && BUILD_COMMAND="/opt/code/scripts/build/build.sh"
 
 # Build the docker container (will be fast if it is already built)
-header "Building Docker Container"
-docker build --build-arg USER_ID=$(id -u) -t $DOTNET_BUILD_CONTAINER_TAG scripts/docker/$DOCKER_OS
+echo "Building Docker Container"
+docker build --build-arg USER_ID=$(id -u) -t $DOTNET_BUILD_CONTAINER_TAG $DOCKERFILE
 
 # Run the build in the container
-header "Launching build in Docker Container"
-info "Using code from: $DOCKER_HOST_SHARE_DIR"
+echo "Launching build in Docker Container"
+echo "Using code from: $DOCKER_HOST_SHARE_DIR"
 docker run -t --rm --sig-proxy=true \
     --name $DOTNET_BUILD_CONTAINER_NAME \
     -v $DOCKER_HOST_SHARE_DIR:/opt/code \
-    -e DOTNET_CLI_VERSION \
     -e SASTOKEN \
     -e STORAGE_ACCOUNT \
     -e STORAGE_CONTAINER \

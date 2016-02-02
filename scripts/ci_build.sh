@@ -16,7 +16,7 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "$SCRIPT_DIR/common/_common.sh"
+export CONFIGURATION="$1"
 
 # Tell install scripts to skip pre-req check since the CI has the pre-reqs but not ldconfig it seems
 # Also, install to a directory under the repo root since we don't have permission to work elsewhere
@@ -35,17 +35,10 @@ container_name=""
 
 #Jenkins
 [ ! -z "$BUILD_TAG" ] && container_name="$BUILD_TAG"
+
 #VSO
 [ ! -z "$BUILD_BUILDID" ] && container_name="$BUILD_BUILDID"
 
 export DOTNET_BUILD_CONTAINER_NAME="$container_name"
 
-
-if [[ "$OSNAME" == "ubuntu" ]]; then
-    export PACKAGE_IN_DOCKER="true"
-    unset BUILD_IN_DOCKER
-
-    $SCRIPT_DIR/../build.sh $@
-else
-    $SCRIPT_DIR/../build.sh $@
-fi
+VERBOSE=1 $SCRIPT_DIR/../build.sh $2
