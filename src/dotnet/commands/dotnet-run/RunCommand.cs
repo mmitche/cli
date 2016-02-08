@@ -99,13 +99,13 @@ namespace Microsoft.DotNet.Tools.Run
 
             // Compile to that directory
             var result = Build.BuildCommand.Run(new[]
-                {
-                    $"--framework",
-                    $"{_context.TargetFramework}",
-                    $"--configuration",
-                    Configuration,
-                    $"{_context.ProjectFile.ProjectDirectory}"
-                });
+            {
+                $"--framework",
+                $"{_context.TargetFramework}",
+                $"--configuration",
+                Configuration,
+                $"{_context.ProjectFile.ProjectDirectory}"
+            });
 
             if (result != 0)
             {

@@ -360,22 +360,27 @@ namespace Microsoft.DotNet.Tools.Build
                 }
                 else
                 {
-                    var calculator = _rootProject.GetOutputPathCalculator(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
-                    var dest = calculator.RuntimeOutputPath;
-                    var source = calculator.CompilationOutputPath;
-                    foreach (var file in calculator.GetCompilationFiles().All())
-                    {
-                        var directoryName = Path.GetDirectoryName(file);
-                        if (!Directory.Exists(directoryName))
-                        {
-                            Directory.CreateDirectory(directoryName);
-                        }
-                        File.Copy(file, file.Replace(source, dest), true);
-                    }
+                    CopyCompilationOutput();
                 }
             }
 
             return succeeded;
+        }
+
+        private void CopyCompilationOutput()
+        {
+            var calculator = _rootProject.GetOutputPathCalculator(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
+            var dest = calculator.RuntimeOutputPath;
+            var source = calculator.CompilationOutputPath;
+            foreach (var file in calculator.GetCompilationFiles().All())
+            {
+                var directoryName = Path.GetDirectoryName(file);
+                if (!Directory.Exists(directoryName))
+                {
+                    Directory.CreateDirectory(directoryName);
+                }
+                File.Copy(file, file.Replace(source, dest), true);
+            }
         }
 
         private void MakeRunnable()
