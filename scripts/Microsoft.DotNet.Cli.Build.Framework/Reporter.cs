@@ -25,7 +25,9 @@ namespace Microsoft.DotNet.Cli.Build.Framework
 
         public static Reporter Create(Func<bool, AnsiConsole> getter)
         {
-            return new Reporter(getter(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)));
+            var stripColors = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
+                string.Equals(Environment.GetEnvironmentVariable("NO_COLOR"), "1");
+            return new Reporter(getter(stringColors));
         }
 
         public void WriteLine(string message)

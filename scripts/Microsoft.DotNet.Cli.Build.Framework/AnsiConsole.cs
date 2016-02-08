@@ -11,36 +11,36 @@ namespace Microsoft.DotNet.Cli.Build.Framework
         private AnsiConsole(TextWriter writer, bool useConsoleColor)
         {
             Writer = writer;
-    
+
             _useConsoleColor = useConsoleColor;
             if (_useConsoleColor)
             {
                 OriginalForegroundColor = Console.ForegroundColor;
             }
         }
-    
+
         private int _boldRecursion;
         private bool _useConsoleColor;
-    
+
         public static AnsiConsole GetOutput(bool useConsoleColor)
         {
             return new AnsiConsole(Console.Out, useConsoleColor);
         }
-    
+
         public static AnsiConsole GetError(bool useConsoleColor)
         {
             return new AnsiConsole(Console.Error, useConsoleColor);
         }
-    
+
         public TextWriter Writer { get; }
-    
+
         public ConsoleColor OriginalForegroundColor { get; }
-    
+
         private void SetColor(ConsoleColor color)
         {
             Console.ForegroundColor = (ConsoleColor)(((int)Console.ForegroundColor & 0x08) | ((int)color & 0x07));
         }
-    
+
         private void SetBold(bool bold)
         {
             _boldRecursion += bold ? 1 : -1;
@@ -48,10 +48,10 @@ namespace Microsoft.DotNet.Cli.Build.Framework
             {
                 return;
             }
-    
+
             Console.ForegroundColor = (ConsoleColor)((int)Console.ForegroundColor ^ 0x08);
         }
-    
+
         public void WriteLine(string message)
         {
             if (!_useConsoleColor)
@@ -59,7 +59,7 @@ namespace Microsoft.DotNet.Cli.Build.Framework
                 Writer.WriteLine(message);
                 return;
             }
-    
+
             var escapeScan = 0;
             for (;;)
             {
@@ -80,14 +80,14 @@ namespace Microsoft.DotNet.Cli.Build.Framework
                     {
                         endIndex += 1;
                     }
-    
+
                     var text = message.Substring(escapeScan, escapeIndex - escapeScan);
                     Writer.Write(text);
                     if (endIndex == message.Length)
                     {
                         break;
                     }
-    
+
                     switch (message[endIndex])
                     {
                         case 'm':
@@ -133,7 +133,7 @@ namespace Microsoft.DotNet.Cli.Build.Framework
                             }
                             break;
                     }
-    
+
                     escapeScan = endIndex + 1;
                 }
             }
