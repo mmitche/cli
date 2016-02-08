@@ -5,7 +5,7 @@
 
 . $PSScriptRoot\_utility.ps1
 
-$Skip_Crossgen = $true
+$Skip_Crossgen = $false
 $Rid = "win7-x64"
 $Tfm = "dnxcore50"
 $RepoRoot = Resolve-Path "$PSScriptRoot\..\.."
