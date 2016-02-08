@@ -106,7 +106,8 @@ namespace Microsoft.DotNet.Cli.Build
         [Target]
         public static BuildTargetResult CompileStage1(BuildTargetContext c)
         {
-            CleanProjects(c);
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "src"));
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "test"));
             return CompileStage(c,
                 dotnet: DotNetCli.Stage0,
                 outputDir: Dirs.Stage1,
@@ -116,7 +117,8 @@ namespace Microsoft.DotNet.Cli.Build
         [Target]
         public static BuildTargetResult CompileStage2(BuildTargetContext c)
         {
-            CleanProjects(c);
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "src"));
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "test"));
             return CompileStage(c,
                 dotnet: DotNetCli.Stage1,
                 outputDir: Dirs.Stage2,
@@ -344,22 +346,19 @@ namespace Microsoft.DotNet.Cli.Build
             return list;
         }
 
-        private static void CleanProjects(BuildTargetContext c)
+        private static void CleanBinObj(BuildTargetContext c, string dir)
         {
-            foreach(var projectDir in Directory.EnumerateDirectories(Path.Combine(c.BuildContext.BuildDirectory, "src")))
+            dir = dir ?? c.BuildContext.BuildDirectory;
+            foreach(var candidate in Directory.EnumerateDirectories(dir))
             {
-                var binDir = Path.Combine(projectDir, "bin");
-                if (Directory.Exists(binDir))
+                if (string.Equals(Path.GetFileName(candidate), "bin") ||
+                    string.Equals(Path.GetFileName(candidate), "obj"))
                 {
-                    Directory.Delete(binDir, recursive: true);
-                    c.Info($"Deleting {binDir}");
+                    Directory.Delete(candidate, recursive: true);
                 }
-
-                var objDir = Path.Combine(projectDir, "obj");
-                if (Directory.Exists(objDir))
+                else
                 {
-                    Directory.Delete(objDir, recursive: true);
-                    c.Info($"Deleting {objDir}");
+                    CleanBinObj(c, candidate);
                 }
             }
         }
