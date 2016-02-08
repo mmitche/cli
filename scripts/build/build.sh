@@ -17,7 +17,10 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 source "$DIR/../common/_common.sh"
+
 source "$REPOROOT/scripts/build/generate-version.sh"
+
+"$REPOROOT/scripts/clean/clear-nuget-cache.sh"
 
 header "Building dotnet tools version $DOTNET_CLI_VERSION - $CONFIGURATION"
 header "Checking Pre-Reqs"

@@ -14,6 +14,8 @@ $ErrorActionPreference="Stop"
 
 . "$RepoRoot\scripts\build\generate-version.ps1"
 
+_ "$RepoRoot\scripts\clean\clear-nuget-cache.ps1"
+
 header "Building dotnet tools version $($env:DOTNET_CLI_VERSION) - $Configuration"
 header "Checking Pre-Reqs"
 
