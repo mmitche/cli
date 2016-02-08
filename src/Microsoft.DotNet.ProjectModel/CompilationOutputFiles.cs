@@ -25,7 +25,6 @@ namespace Microsoft.DotNet.ProjectModel
             Project = project;
             Configuration = configuration;
             Framework = framework;
-
             OutputExtension = FileNameSuffixes.DotNet.DynamicLib;
 
             var compilationOptions = Project.GetCompilerOptions(framework, configuration);
@@ -36,6 +35,26 @@ namespace Microsoft.DotNet.ProjectModel
         }
 
         public string BasePath { get; }
+
+        public string Assembly
+        {
+            get
+            {
+                return Path.Combine(
+                    BasePath,
+                    Project.Name + OutputExtension);
+            }
+        }
+
+        public string PdbPath
+        {
+            get
+            {
+                return Path.ChangeExtension(Assembly, FileNameSuffixes.CurrentPlatform.ProgramDatabase);
+            }
+        }
+
+        public string OutputExtension { get; }
 
         public virtual IEnumerable<string> Resources()
         {
@@ -64,24 +83,5 @@ namespace Microsoft.DotNet.ProjectModel
                 yield return resource;
             }
         }
-
-        public string Assembly
-        {
-            get
-            {
-                return Path.Combine(
-                    BasePath,
-                    Project.Name + OutputExtension);
-            }
-        }
-        public string PdbPath
-        {
-            get
-            {
-                return Path.ChangeExtension(Assembly, FileNameSuffixes.CurrentPlatform.ProgramDatabase);
-            }
-        }
-
-        public string OutputExtension { get; }
     }
 }

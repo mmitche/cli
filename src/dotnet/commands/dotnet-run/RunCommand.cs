@@ -66,7 +66,6 @@ namespace Microsoft.DotNet.Tools.Run
                 var defaultFrameworks = new[]
                 {
                     FrameworkConstants.FrameworkIdentifiers.DnxCore,
-                    FrameworkConstants.FrameworkIdentifiers.NetStandard,
                     FrameworkConstants.FrameworkIdentifiers.NetStandardApp,
                 };
 
@@ -114,7 +113,7 @@ namespace Microsoft.DotNet.Tools.Run
             }
 
             // Now launch the output and give it the results
-            var outputName = _context.GetOutputPathCalculator(Configuration).RuntimeFiles.Executable;
+            var outputName = _context.GetOutputPathCalculator(Configuration).GetRuntimeFiles().Executable;
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

@@ -98,7 +98,7 @@ namespace Microsoft.Dotnet.Cli.Compiler.Common
 
         public void GenerateBindingRedirects(LibraryExporter exporter)
         {
-            var outputName = _calculator.RuntimeFiles.Assembly;
+            var outputName = _calculator.GetRuntimeFiles().Assembly;
 
             var existingConfig = new DirectoryInfo(_context.ProjectDirectory)
                 .EnumerateFiles()

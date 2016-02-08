@@ -54,25 +54,30 @@ namespace Microsoft.DotNet.Cli.Compiler.Common
             }
             foreach (var asset in assets)
             {
-
-                string targetName = destinationPath;
-                if (!string.IsNullOrEmpty(asset.RelativePath))
-                {
-                    targetName = Path.Combine(destinationPath, asset.RelativePath);
-                    var destinationAssetPath = Path.GetDirectoryName(targetName);
-
-                    if (!Directory.Exists(destinationAssetPath))
-                    {
-                        Directory.CreateDirectory(destinationAssetPath);
-                    }
-                }
-                else
-                {
-                    targetName = Path.Combine(destinationPath, Path.GetFileName(asset.ResolvedPath));
-                }
+                var targetName = ResolveTargetName(destinationPath, asset);
 
                 File.Copy(asset.ResolvedPath, targetName, overwrite: true);
             }
+        }
+
+        private static string ResolveTargetName(string destinationPath, LibraryAsset asset)
+        {
+            string targetName;
+            if (!string.IsNullOrEmpty(asset.RelativePath))
+            {
+                targetName = Path.Combine(destinationPath, asset.RelativePath);
+                var destinationAssetPath = Path.GetDirectoryName(targetName);
+
+                if (!Directory.Exists(destinationAssetPath))
+                {
+                    Directory.CreateDirectory(destinationAssetPath);
+                }
+            }
+            else
+            {
+                targetName = Path.Combine(destinationPath, Path.GetFileName(asset.ResolvedPath));
+            }
+            return targetName;
         }
     }
 }

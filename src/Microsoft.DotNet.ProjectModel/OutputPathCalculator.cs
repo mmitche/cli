@@ -18,13 +18,31 @@ namespace Microsoft.DotNet.ProjectModel
 
         private readonly string _runtimePath;
         private readonly RuntimeOutputFiles _runtimeFiles;
+        private readonly CompilationOutputFiles _compilationFiles;
+
+        public string CompilationOutputPath { get; }
+
+        public string IntermediateOutputDirectoryPath { get; }
+
+        public string RuntimeOutputPath
+        {
+            get
+            {
+                if (_runtimePath == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot get runtime output path for {nameof(OutputPathCalculator)} with no runtime set");
+                }
+                return _runtimePath;
+            }
+        }
 
         public OutputPathCalculator(
             Project project,
             NuGetFramework framework,
             string runtimeIdentifier,
             string configuration,
-            string rootPath,
+            string solutionRootPath,
             string buildBasePath,
             string outputPath)
         {
@@ -38,13 +56,13 @@ namespace Microsoft.DotNet.ProjectModel
             }
             else
             {
-                if (string.IsNullOrEmpty(rootPath))
+                if (string.IsNullOrEmpty(solutionRootPath))
                 {
                     resolvedBuildBasePath = Path.Combine(buildBasePath, project.Name);
                 }
                 else
                 {
-                    resolvedBuildBasePath = _project.ProjectDirectory.Replace(rootPath, buildBasePath);
+                    resolvedBuildBasePath = _project.ProjectDirectory.Replace(solutionRootPath, buildBasePath);
                 }
             }
 
@@ -71,43 +89,26 @@ namespace Microsoft.DotNet.ProjectModel
                 configuration,
                 _framework.GetTwoDigitShortFolderName()));
 
-            CompilationFiles = new CompilationOutputFiles(CompilationOutputPath, project, configuration, framework);
+            _compilationFiles = new CompilationOutputFiles(CompilationOutputPath, project, configuration, framework);
             if (_runtimePath != null)
             {
                 _runtimeFiles = new RuntimeOutputFiles(_runtimePath, project, configuration, framework);
             }
         }
 
-        public string CompilationOutputPath { get; }
-
-        public string RuntimeOutputPath
+        public CompilationOutputFiles GetCompilationFiles()
         {
-            get
-            {
-                if (_runtimePath == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Cannot get runtime output path for {nameof(OutputPathCalculator)} with no runtime set");
-                }
-                return _runtimePath;
-            }
+            return _compilationFiles;
         }
 
-        public string IntermediateOutputDirectoryPath { get; }
-
-        public CompilationOutputFiles CompilationFiles { get; }
-
-        public RuntimeOutputFiles RuntimeFiles
+        public RuntimeOutputFiles GetRuntimeFiles()
         {
-            get
+            if (_runtimeFiles == null)
             {
-                if (_runtimeFiles == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Cannot get runtime output files for {nameof(OutputPathCalculator)} with no runtime set");
-                }
-                return _runtimeFiles;
+                throw new InvalidOperationException(
+                    $"Cannot get runtime output files for {nameof(OutputPathCalculator)} with no runtime set");
             }
+            return _runtimeFiles;
         }
     }
 }

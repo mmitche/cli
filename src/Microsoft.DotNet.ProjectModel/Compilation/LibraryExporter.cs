@@ -19,9 +19,14 @@ namespace Microsoft.DotNet.ProjectModel.Compilation
         private readonly string _runtime;
         private readonly ProjectDescription _rootProject;
         private readonly string _buildBasePath;
-        private readonly string _rootPath;
+        private readonly string _solutionRootPath;
 
-        public LibraryExporter(ProjectDescription rootProject, LibraryManager manager, string configuration, string runtime, string buildBasePath, string rootPath)
+        public LibraryExporter(ProjectDescription rootProject,
+            LibraryManager manager,
+            string configuration,
+            string runtime,
+            string buildBasePath,
+            string solutionRootPath)
         {
             if (string.IsNullOrEmpty(configuration))
             {
@@ -32,7 +37,7 @@ namespace Microsoft.DotNet.ProjectModel.Compilation
             _configuration = configuration;
             _runtime = runtime;
             _buildBasePath = buildBasePath;
-            _rootPath = rootPath;
+            _solutionRootPath = solutionRootPath;
             _rootProject = rootProject;
         }
 
@@ -190,12 +195,12 @@ namespace Microsoft.DotNet.ProjectModel.Compilation
                     Path.GetFullPath(Path.Combine(project.Project.ProjectDirectory, assemblyPath)));
 
                 compileAssemblies.Add(compileAsset);
-                runtimeAssets.Add(new LibraryAsset(pdbPath, Path.GetFileName(pdbPath), pdbPath));
+                runtimeAssets.Add(new LibraryAsset(Path.GetFileName(pdbPath), Path.GetFileName(pdbPath), pdbPath));
             }
             else if (project.Project.Files.SourceFiles.Any())
             {
-                var outputCalculator = project.GetOutputPathCalculator(_buildBasePath, _rootPath, _configuration, _runtime);
-                var files = outputCalculator.CompilationFiles;
+                var outputCalculator = project.GetOutputPathCalculator(_buildBasePath, _solutionRootPath, _configuration, _runtime);
+                var files = outputCalculator.GetCompilationFiles();
 
                 var assemblyPath = files.Assembly;
                 compileAssemblies.Add(new LibraryAsset(project.Identity.Name, null, assemblyPath));
@@ -207,7 +212,7 @@ namespace Microsoft.DotNet.ProjectModel.Compilation
                         continue;
                     }
 
-                    runtimeAssets.Add(new LibraryAsset(path, path.Replace(files.BasePath, string.Empty), path));
+                    runtimeAssets.Add(new LibraryAsset(Path.GetFileName(path), path.Replace(files.BasePath, string.Empty), path));
                 }
             }
 

@@ -363,7 +363,7 @@ namespace Microsoft.DotNet.Tools.Build
                     var calculator = _rootProject.GetOutputPathCalculator(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
                     var dest = calculator.RuntimeOutputPath;
                     var source = calculator.CompilationOutputPath;
-                    foreach (var file in calculator.CompilationFiles.All())
+                    foreach (var file in calculator.GetCompilationFiles().All())
                     {
                         var directoryName = Path.GetDirectoryName(file);
                         if (!Directory.Exists(directoryName))
@@ -452,10 +452,10 @@ namespace Microsoft.DotNet.Tools.Build
             // input: dependencies
             AddDependencies(dependencies, compilerIO);
 
-            var allOutputPath = new List<string>(calculator.CompilationFiles.All());
+            var allOutputPath = new List<string>(calculator.GetCompilationFiles().All());
             if (!string.IsNullOrEmpty(project.RuntimeIdentifier))
             {
-                allOutputPath.AddRange(calculator.RuntimeFiles.All());
+                allOutputPath.AddRange(calculator.GetRuntimeFiles().All());
             }
             // output: compiler outputs
             foreach (var path in allOutputPath)

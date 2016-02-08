@@ -69,7 +69,7 @@ namespace Microsoft.DotNet.Tools.Compiler
             Directory.CreateDirectory(nativeOutputPath);
             Directory.CreateDirectory(nativeTempOutput);
 
-            var managedOutput = outputPathCalculator.CompilationFiles.Assembly;
+            var managedOutput = outputPathCalculator.GetCompilationFiles().Assembly;
 
             var nativeArgs = new List<string>();
 
@@ -196,7 +196,7 @@ namespace Microsoft.DotNet.Tools.Compiler
             }
 
             // Get compilation options
-            var outputName = outputPathCalculator.CompilationFiles.Assembly;
+            var outputName = outputPathCalculator.GetCompilationFiles().Assembly;
 
             // Assemble args
             var compilerArgs = new List<string>()

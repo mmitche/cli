@@ -95,7 +95,7 @@ namespace Microsoft.DotNet.Tools.Test
 
         private static int RunConsole(ProjectContext projectContext, CommandLineApplication app, string testRunner, string configuration)
         {
-            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).CompilationFiles.Assembly };
+            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).GetCompilationFiles().Assembly };
             commandArgs.AddRange(app.RemainingArguments);
 
             return Command.CreateDotNet($"{GetCommandName(testRunner)}", commandArgs, projectContext.TargetFramework)
@@ -174,7 +174,7 @@ namespace Microsoft.DotNet.Tools.Test
         {
             TestHostTracing.Source.TraceInformation("Starting Discovery");
 
-            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).CompilationFiles.Assembly };
+            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).GetCompilationFiles().Assembly };
 
             commandArgs.AddRange(new[]
             {
@@ -196,7 +196,7 @@ namespace Microsoft.DotNet.Tools.Test
         {
             TestHostTracing.Source.TraceInformation("Starting Execution");
 
-            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).CompilationFiles.Assembly };
+            var commandArgs = new List<string> { projectContext.GetOutputPathCalculator(configuration).GetCompilationFiles().Assembly };
 
             commandArgs.AddRange(new[]
             {
