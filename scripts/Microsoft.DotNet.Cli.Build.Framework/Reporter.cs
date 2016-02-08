@@ -27,7 +27,7 @@ namespace Microsoft.DotNet.Cli.Build.Framework
         {
             var stripColors = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
                 string.Equals(Environment.GetEnvironmentVariable("NO_COLOR"), "1");
-            return new Reporter(getter(stringColors));
+            return new Reporter(getter(stripColors));
         }
 
         public void WriteLine(string message)
