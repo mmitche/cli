@@ -23,25 +23,27 @@ if exist mscorlib.ni.dll (
     copy /Y mscorlib.ni.dll mscorlib.dll > nul
 )
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% System.Collections.Immutable.dll >nul 2>nul
+set READYTORUN=
+
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% System.Collections.Immutable.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% System.Reflection.Metadata.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% System.Reflection.Metadata.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.CSharp.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.CSharp.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.VisualBasic.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% Microsoft.CodeAnalysis.VisualBasic.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% csc.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% csc.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
-crossgen /nologo /ReadyToRun /Platform_Assemblies_Paths %BIN_DIR% vbc.dll >nul 2>nul
+crossgen /nologo %READYTORUN% /Platform_Assemblies_Paths %BIN_DIR% vbc.dll >nul 2>nul
 if not %errorlevel% EQU 0 goto fail
 
 popd

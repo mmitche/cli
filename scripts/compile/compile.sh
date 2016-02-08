@@ -20,4 +20,7 @@ $REPOROOT/scripts/compile/compile-corehost.sh
 
 $REPOROOT/scripts/compile/compile-stage-1.sh
 
+# Issue https://github.com/dotnet/cli/issues/1294
+_ "$RepoRoot\scripts\build\restore-packages.sh"
+
 $REPOROOT/scripts/compile/compile-stage-2.sh

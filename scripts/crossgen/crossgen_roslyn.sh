@@ -38,7 +38,7 @@ else
     exit 1
 fi
 
-READYTORUN="-ReadyToRun"
+READYTORUN=""
 
 # Replace with a robust method for finding the right crossgen.exe
 CROSSGEN_UTIL=$NUGET_PACKAGES/runtime.$RID.Microsoft.NETCore.Runtime.CoreCLR/1.0.1-rc2-23805/tools/crossgen
