@@ -122,9 +122,9 @@ namespace Microsoft.DotNet.ProjectModel
                         .BuildAllTargets();
         }
 
-        public OutputPathInfo GetOutputPathInfo(string configuration, string buidBasePath = null, string outputPath = null)
+        public OutputPaths GetOutputPaths(string configuration, string buidBasePath = null, string outputPath = null)
         {
-            return new OutputPathInfo(ProjectFile,
+            return OutputPathCalculator.GetOutputPaths(ProjectFile,
                 TargetFramework,
                 RuntimeIdentifier,
                 configuration,

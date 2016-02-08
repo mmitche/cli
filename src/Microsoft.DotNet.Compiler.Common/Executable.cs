@@ -19,20 +19,20 @@ namespace Microsoft.Dotnet.Cli.Compiler.Common
     {
         private readonly ProjectContext _context;
 
-        private readonly OutputPathInfo _outputPathInfo;
+        private readonly OutputPaths _outputPaths;
 
         private readonly LibraryExporter _exporter;
 
-        public Executable(ProjectContext context, OutputPathInfo outputPathInfo, LibraryExporter exporter)
+        public Executable(ProjectContext context, OutputPaths outputPaths, LibraryExporter exporter)
         {
             _context = context;
-            _outputPathInfo = outputPathInfo;
+            _outputPaths = outputPaths;
             _exporter = exporter;
         }
 
         public void MakeCompilationOutputRunnable()
         {
-            var outputPath = _outputPathInfo.RuntimeOutputPath;
+            var outputPath = _outputPaths.RuntimeOutputPath;
 
             CopyContentFiles(outputPath);
 
@@ -98,7 +98,7 @@ namespace Microsoft.Dotnet.Cli.Compiler.Common
 
         public void GenerateBindingRedirects(LibraryExporter exporter)
         {
-            var outputName = _outputPathInfo.RuntimeFiles.Assembly;
+            var outputName = _outputPaths.RuntimeFiles.Assembly;
 
             var existingConfig = new DirectoryInfo(_context.ProjectDirectory)
                 .EnumerateFiles()

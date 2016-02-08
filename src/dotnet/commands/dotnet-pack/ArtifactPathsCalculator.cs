@@ -56,7 +56,7 @@ namespace Microsoft.DotNet.Tools.Pack
 
         public string InputPathForContext(ProjectContext context)
         {
-            return new OutputPathInfo(context.ProjectFile,
+            return OutputPathCalculator.GetOutputPaths(context.ProjectFile,
                 context.TargetFramework,
                 context.RuntimeIdentifier,
                 _configuration,

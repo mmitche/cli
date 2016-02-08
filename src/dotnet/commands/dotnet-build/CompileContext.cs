@@ -369,7 +369,7 @@ namespace Microsoft.DotNet.Tools.Build
 
         private void CopyCompilationOutput()
         {
-            var calculator = _rootProject.GetOutputPathInfo(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
+            var calculator = _rootProject.GetOutputPaths(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
             var dest = calculator.RuntimeOutputPath;
             var source = calculator.CompilationOutputPath;
             foreach (var file in calculator.CompilationFiles.All())
@@ -385,9 +385,9 @@ namespace Microsoft.DotNet.Tools.Build
 
         private void MakeRunnable()
         {
-            var outputPathInfo = _rootProject.GetOutputPathInfo(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
+            var outputPaths = _rootProject.GetOutputPaths(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
             var libraryExporter = _rootProject.CreateExporter(_args.ConfigValue, _args.BuildBasePathValue);
-            var executable = new Executable(_rootProject, outputPathInfo, libraryExporter);
+            var executable = new Executable(_rootProject, outputPaths, libraryExporter);
             executable.MakeCompilationOutputRunnable();
         }
 
@@ -441,7 +441,7 @@ namespace Microsoft.DotNet.Tools.Build
             ProjectDependenciesFacade dependencies)
         {
             var compilerIO = new CompilerIO(new List<string>(), new List<string>());
-            var calculator = project.GetOutputPathInfo(buildConfiguration, buildBasePath, outputPath);
+            var calculator = project.GetOutputPaths(buildConfiguration, buildBasePath, outputPath);
             var binariesOutputPath = calculator.CompilationOutputPath;
 
             // input: project.json
