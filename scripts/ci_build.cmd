@@ -7,6 +7,8 @@ set CI_BUILD=1
 set CONFIGURATION=%1
 set VERBOSE=1
 
+set DOTNET_BUILD_SKIP_CROSSGEN=1
+
 CALL %~dp0..\build.cmd %2
 
 exit /b %errorlevel%

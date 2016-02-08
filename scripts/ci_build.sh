@@ -9,6 +9,8 @@ set -e
 export CI_BUILD=1
 export NO_COLOR=1
 
+export DOTNET_BUILD_SKIP_CROSSGEN=1
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
