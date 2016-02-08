@@ -60,16 +60,16 @@ namespace Microsoft.DotNet.Tools.Compiler
             ProjectContext context,
             CompilerCommandApp args)
         {
-            var outputPathCalculator = context.GetOutputPathCalculator(args.ConfigValue, args.BuildBasePathValue, args.OutputValue);
-            var outputPath = outputPathCalculator.RuntimeOutputPath;
+            var outputPathInfo = context.GetOutputPathInfo(args.ConfigValue, args.BuildBasePathValue, args.OutputValue);
+            var outputPath = outputPathInfo.RuntimeOutputPath;
             var nativeOutputPath = Path.Combine(outputPath, "native");
             var intermediateOutputPath =
-                outputPathCalculator.IntermediateOutputDirectoryPath;
+                outputPathInfo.IntermediateOutputDirectoryPath;
             var nativeTempOutput = Path.Combine(intermediateOutputPath, "native");
             Directory.CreateDirectory(nativeOutputPath);
             Directory.CreateDirectory(nativeTempOutput);
 
-            var managedOutput = outputPathCalculator.GetCompilationFiles().Assembly;
+            var managedOutput = outputPathInfo.CompilationFiles.Assembly;
 
             var nativeArgs = new List<string>();
 
@@ -155,10 +155,10 @@ namespace Microsoft.DotNet.Tools.Compiler
         private static bool CompileProject(ProjectContext context, CompilerCommandApp args)
         {
             // Set up Output Paths
-            var outputPathCalculator = context.GetOutputPathCalculator(args.ConfigValue, args.BuildBasePathValue);
-            var outputPath = outputPathCalculator.CompilationOutputPath;
+            var outputPathInfo = context.GetOutputPathInfo(args.ConfigValue, args.BuildBasePathValue);
+            var outputPath = outputPathInfo.CompilationOutputPath;
             var intermediateOutputPath =
-                outputPathCalculator.IntermediateOutputDirectoryPath;
+                outputPathInfo.IntermediateOutputDirectoryPath;
 
             Directory.CreateDirectory(outputPath);
             Directory.CreateDirectory(intermediateOutputPath);
@@ -196,7 +196,7 @@ namespace Microsoft.DotNet.Tools.Compiler
             }
 
             // Get compilation options
-            var outputName = outputPathCalculator.GetCompilationFiles().Assembly;
+            var outputName = outputPathInfo.CompilationFiles.Assembly;
 
             // Assemble args
             var compilerArgs = new List<string>()

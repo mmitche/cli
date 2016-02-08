@@ -199,8 +199,8 @@ namespace Microsoft.DotNet.ProjectModel.Compilation
             }
             else if (project.Project.Files.SourceFiles.Any())
             {
-                var outputCalculator = project.GetOutputPathCalculator(_buildBasePath, _solutionRootPath, _configuration, _runtime);
-                var files = outputCalculator.GetCompilationFiles();
+                var outputCalculator = project.GetOutputPathInfo(_buildBasePath, _solutionRootPath, _configuration, _runtime);
+                var files = outputCalculator.CompilationFiles;
 
                 var assemblyPath = files.Assembly;
                 compileAssemblies.Add(new LibraryAsset(project.Identity.Name, null, assemblyPath));

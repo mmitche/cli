@@ -113,7 +113,7 @@ namespace Microsoft.DotNet.Tools.Run
             }
 
             // Now launch the output and give it the results
-            var outputName = _context.GetOutputPathCalculator(Configuration).GetRuntimeFiles().Executable;
+            var outputName = _context.GetOutputPathInfo(Configuration).RuntimeFiles.Executable;
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

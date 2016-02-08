@@ -369,10 +369,10 @@ namespace Microsoft.DotNet.Tools.Build
 
         private void CopyCompilationOutput()
         {
-            var calculator = _rootProject.GetOutputPathCalculator(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
+            var calculator = _rootProject.GetOutputPathInfo(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
             var dest = calculator.RuntimeOutputPath;
             var source = calculator.CompilationOutputPath;
-            foreach (var file in calculator.GetCompilationFiles().All())
+            foreach (var file in calculator.CompilationFiles.All())
             {
                 var directoryName = Path.GetDirectoryName(file);
                 if (!Directory.Exists(directoryName))
@@ -385,9 +385,9 @@ namespace Microsoft.DotNet.Tools.Build
 
         private void MakeRunnable()
         {
-            var outputPathCalculator = _rootProject.GetOutputPathCalculator(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
+            var outputPathInfo = _rootProject.GetOutputPathInfo(_args.ConfigValue, _args.BuildBasePathValue, _args.OutputValue);
             var libraryExporter = _rootProject.CreateExporter(_args.ConfigValue, _args.BuildBasePathValue);
-            var executable = new Executable(_rootProject, outputPathCalculator, libraryExporter);
+            var executable = new Executable(_rootProject, outputPathInfo, libraryExporter);
             executable.MakeCompilationOutputRunnable();
         }
 
@@ -441,7 +441,7 @@ namespace Microsoft.DotNet.Tools.Build
             ProjectDependenciesFacade dependencies)
         {
             var compilerIO = new CompilerIO(new List<string>(), new List<string>());
-            var calculator = project.GetOutputPathCalculator(buildConfiguration, buildBasePath, outputPath);
+            var calculator = project.GetOutputPathInfo(buildConfiguration, buildBasePath, outputPath);
             var binariesOutputPath = calculator.CompilationOutputPath;
 
             // input: project.json
@@ -457,10 +457,10 @@ namespace Microsoft.DotNet.Tools.Build
             // input: dependencies
             AddDependencies(dependencies, compilerIO);
 
-            var allOutputPath = new List<string>(calculator.GetCompilationFiles().All());
+            var allOutputPath = new List<string>(calculator.CompilationFiles.All());
             if (!string.IsNullOrEmpty(project.RuntimeIdentifier))
             {
-                allOutputPath.AddRange(calculator.GetRuntimeFiles().All());
+                allOutputPath.AddRange(calculator.RuntimeFiles.All());
             }
             // output: compiler outputs
             foreach (var path in allOutputPath)

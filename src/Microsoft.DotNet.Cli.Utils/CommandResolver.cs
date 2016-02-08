@@ -70,7 +70,7 @@ namespace Microsoft.DotNet.Cli.Utils
 
             if (commandPackage == null) return null;
 
-            var depsPath = projectContext.GetOutputPathCalculator(Constants.DefaultConfiguration).GetRuntimeFiles().Deps;
+            var depsPath = projectContext.GetOutputPathInfo(Constants.DefaultConfiguration).RuntimeFiles.Deps;
 
             return ConfigureCommandFromPackage(commandName, args, commandPackage, projectContext, depsPath, useComSpec);
         }

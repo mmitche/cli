@@ -8,17 +8,13 @@ using NuGet.Frameworks;
 
 namespace Microsoft.DotNet.ProjectModel
 {
-    public class OutputPathCalculator
+    public class OutputPathInfo
     {
         private const string ObjDirectoryName = "obj";
         private const string BinDirectoryName = "bin";
 
-        private readonly Project _project;
-        private readonly NuGetFramework _framework;
-
         private readonly string _runtimePath;
         private readonly RuntimeOutputFiles _runtimeFiles;
-        private readonly CompilationOutputFiles _compilationFiles;
 
         public string CompilationOutputPath { get; }
 
@@ -31,13 +27,28 @@ namespace Microsoft.DotNet.ProjectModel
                 if (_runtimePath == null)
                 {
                     throw new InvalidOperationException(
-                        $"Cannot get runtime output path for {nameof(OutputPathCalculator)} with no runtime set");
+                        $"Cannot get runtime output path for {nameof(OutputPathInfo)} with no runtime set");
                 }
                 return _runtimePath;
             }
         }
 
-        public OutputPathCalculator(
+        public CompilationOutputFiles CompilationFiles { get; }
+
+        public RuntimeOutputFiles RuntimeFiles
+        {
+            get
+            {
+                if (_runtimeFiles == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot get runtime output files for {nameof(OutputPathInfo)} with no runtime set");
+                }
+                return _runtimeFiles;
+            }
+        }
+
+        public OutputPathInfo(
             Project project,
             NuGetFramework framework,
             string runtimeIdentifier,
@@ -46,13 +57,10 @@ namespace Microsoft.DotNet.ProjectModel
             string buildBasePath,
             string outputPath)
         {
-            _project = project;
-            _framework = framework;
-
             string resolvedBuildBasePath;
             if (string.IsNullOrEmpty(buildBasePath))
             {
-                resolvedBuildBasePath = _project.ProjectDirectory;
+                resolvedBuildBasePath = project.ProjectDirectory;
             }
             else
             {
@@ -62,14 +70,14 @@ namespace Microsoft.DotNet.ProjectModel
                 }
                 else
                 {
-                    resolvedBuildBasePath = _project.ProjectDirectory.Replace(solutionRootPath, buildBasePath);
+                    resolvedBuildBasePath = project.ProjectDirectory.Replace(solutionRootPath, buildBasePath);
                 }
             }
 
             CompilationOutputPath = PathUtility.EnsureTrailingSlash(Path.Combine(resolvedBuildBasePath,
                 BinDirectoryName,
                 configuration,
-                _framework.GetShortFolderName()));
+                framework.GetShortFolderName()));
 
             if (string.IsNullOrEmpty(outputPath))
             {
@@ -87,28 +95,13 @@ namespace Microsoft.DotNet.ProjectModel
                 resolvedBuildBasePath,
                 ObjDirectoryName,
                 configuration,
-                _framework.GetTwoDigitShortFolderName()));
+                framework.GetTwoDigitShortFolderName()));
 
-            _compilationFiles = new CompilationOutputFiles(CompilationOutputPath, project, configuration, framework);
+            CompilationFiles = new CompilationOutputFiles(CompilationOutputPath, project, configuration, framework);
             if (_runtimePath != null)
             {
                 _runtimeFiles = new RuntimeOutputFiles(_runtimePath, project, configuration, framework);
             }
-        }
-
-        public CompilationOutputFiles GetCompilationFiles()
-        {
-            return _compilationFiles;
-        }
-
-        public RuntimeOutputFiles GetRuntimeFiles()
-        {
-            if (_runtimeFiles == null)
-            {
-                throw new InvalidOperationException(
-                    $"Cannot get runtime output files for {nameof(OutputPathCalculator)} with no runtime set");
-            }
-            return _runtimeFiles;
         }
     }
 }

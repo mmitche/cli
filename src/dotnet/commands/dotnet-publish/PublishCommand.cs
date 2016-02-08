@@ -88,7 +88,7 @@ namespace Microsoft.DotNet.Tools.Publish
             
             if (string.IsNullOrEmpty(outputPath))
             {
-                outputPath = context.GetOutputPathCalculator(configuration, buildBasePath, outputPath).RuntimeOutputPath;
+                outputPath = context.GetOutputPathInfo(configuration, buildBasePath, outputPath).RuntimeOutputPath;
             }
 
             var contextVariables = new Dictionary<string, string>
