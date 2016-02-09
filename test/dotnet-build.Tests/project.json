@@ -23,6 +23,8 @@
   "content": [
     "../TestProjects/TestSimpleIncrementalApp/*",
     "../TestProjects/TestProjectToProjectDependencies/**/*",
+    "../TestProjects/TestProjectWithCultureSpecificResource/**/*",
+    "../TestProjects/TestProjectWithResource/**/*",
     "../TestProjects/global.json"
   ],
 

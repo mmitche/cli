@@ -23,7 +23,8 @@
   "content": [
     "../TestProjects/TestLibraryWithAnalyzer/*",
     "../TestProjects/TestLibrary/*",
-    "../TestProjects/global.json"
+    "../TestProjects/global.json",
+    "../TestProjects/TestProjectWithCultureSpecificResource/*"
   ],
 
   "testRunner": "xunit"
