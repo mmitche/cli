@@ -370,22 +370,5 @@ namespace Microsoft.DotNet.Cli.Build
 
             return list;
         }
-
-        private static void CleanBinObj(BuildTargetContext c, string dir)
-        {
-            dir = dir ?? c.BuildContext.BuildDirectory;
-            foreach(var candidate in Directory.EnumerateDirectories(dir))
-            {
-                if (string.Equals(Path.GetFileName(candidate), "bin") ||
-                    string.Equals(Path.GetFileName(candidate), "obj"))
-                {
-                    Directory.Delete(candidate, recursive: true);
-                }
-                else
-                {
-                    CleanBinObj(c, candidate);
-                }
-            }
-        }
     }
 }

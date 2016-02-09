@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using static Microsoft.DotNet.Cli.Build.Framework.BuildHelpers;
 using static Microsoft.DotNet.Cli.Build.FS;
 
@@ -36,6 +37,9 @@ namespace Microsoft.DotNet.Cli.Build
         [Target]
         public static BuildTargetResult RestoreTestPrerequisites(BuildTargetContext c)
         {
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "src"));
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "test"));
+
             var dotnet = DotNetCli.Stage2;
             dotnet.Restore().WorkingDirectory(Path.Combine(c.BuildContext.BuildDirectory, "test", "TestPackages")).Execute().EnsureSuccessful();
 
@@ -68,6 +72,9 @@ namespace Microsoft.DotNet.Cli.Build
         [Target]
         public static BuildTargetResult RestoreTests(BuildTargetContext c)
         {
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "src"));
+            CleanBinObj(c, Path.Combine(c.BuildContext.BuildDirectory, "test"));
+
             var configuration = (string)c.BuildContext["Configuration"] ?? "Debug";
             DotNetCli.Stage2.Restore("--fallbacksource", Path.Combine(Dirs.TestPackages, configuration))
                 .WorkingDirectory(Path.Combine(c.BuildContext.BuildDirectory, "test"))
