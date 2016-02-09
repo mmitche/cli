@@ -23,6 +23,7 @@ namespace Microsoft.DotNet.Cli.Build
             var env = new Dictionary<string, string>()
             {
                 { "RID", PlatformServices.Default.Runtime.GetRuntimeIdentifier() },
+                { "OSNAME", PlatformServices.Default.Runtime.OperatingSystem },
                 { "TFM", "dnxcore50" },
                 { "OutputDir", Dirs.Output },
                 { "Stage1Dir", Dirs.Stage1 },

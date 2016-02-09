@@ -148,6 +148,12 @@ cmake is required to build the native host 'corehost'";
                 Environment.SetEnvironmentVariable("NUGET_PACKAGES", Dirs.NuGetPackages);
             }
 
+            // Clean NuGet Temp Cache on Linux (seeing some issues)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Directory.Exists("/tmp/NuGet"))
+            {
+                Directory.Delete("/tmp/NuGet", recursive: true);
+            }
+
             // Determine cache expiration time
             var cacheExpiration = 7 * 24; // cache expiration in hours
             var cacheExpirationStr = Environment.GetEnvironmentVariable("NUGET_PACKAGES_CACHE_TIME_LIMIT");

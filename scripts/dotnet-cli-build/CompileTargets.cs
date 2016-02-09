@@ -238,7 +238,20 @@ namespace Microsoft.DotNet.Cli.Build
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return c.Failed("Haven't done Linux appdepsdk yet. Need to detect Ubuntu vs CentOS");
+                var osname = PlatformServices.Default.Runtime.OperatingSystem;
+                if (string.Equals(osname, "ubuntu", StringComparison.OrdinalIgnoreCase))
+                {
+                    packageId = "toolchain.ubuntu.14.04-x64.Microsoft.DotNet.AppDep";
+                }
+                else if (string.Equals(osname, "centos", StringComparison.OrdinalIgnoreCase))
+                {
+                    c.Warn("Native compilation is not yet working on CentOS");
+                    return c.Success();
+                }
+                else
+                {
+                    return c.Failed($"Unknown Linux Distro: {osname}");
+                }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -275,7 +288,19 @@ namespace Microsoft.DotNet.Cli.Build
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return c.Failed("Haven't done Linux crossgen yet. Need to detect Ubuntu vs CentOS");
+                var osname = PlatformServices.Default.Runtime.OperatingSystem;
+                if (string.Equals(osname, "ubuntu", StringComparison.OrdinalIgnoreCase))
+                {
+                    packageId = "runtime.ubuntu.14.04-x64.Microsoft.NETCore.Runtime.CoreCLR";
+                }
+                else if (string.Equals(osname, "centos", StringComparison.OrdinalIgnoreCase))
+                {
+                    packageId = "runtime.centos.7.1-x64.Microsoft.NETCore.Runtime.CoreCLR";
+                }
+                else
+                {
+                    return c.Failed($"Unknown Linux Distro: {osname}");
+                }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
